@@ -1,18 +1,18 @@
 using Microsoft.Extensions.Options;
-using RPMFuel.Config;
+using RPMFuel.Infrastructure.Config;
 
 namespace RPMFuel;
 
 public class Worker : BackgroundService
 {
     private readonly ILogger<Worker> _logger;
-    private readonly IOptions<WorkerConfigOptions> _options;
+    private readonly WorkerConfigOptions _workerConfig;
     private readonly PetrolService _petrolService;
 
     public Worker(ILogger<Worker> logger, IOptions<WorkerConfigOptions> options, PetrolService petrolService)
     {
         _logger = logger;
-        _options = options;
+        _workerConfig = options.Value;
         _petrolService = petrolService;
     }
 
@@ -20,14 +20,13 @@ public class Worker : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            if (_logger.IsEnabled(LogLevel.Information))
-            {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-            }
+
+            _logger.LogInformation("Worker running at: {time} with {interval} seconds interval",
+                DateTimeOffset.Now, _workerConfig.DelayInSeconds);
 
             await _petrolService.UpdatePrices();
 
-            var delay = TimeSpan.FromSeconds(_options.Value.DelayInSeconds);
+            var delay = TimeSpan.FromSeconds(_workerConfig.DelayInSeconds);
             await Task.Delay((int)delay.TotalMilliseconds, stoppingToken);
         }
     }

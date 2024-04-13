@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using RPMFuel.Config;
+using RPMFuel.Infrastructure.Config;
 
-namespace RPMFuel.HttpClients;
+namespace RPMFuel.Infrastructure.HttpClients;
 
 public class EIAClient
 {
@@ -15,12 +15,12 @@ public class EIAClient
         _options = options;
     }
 
-    public async Task<EIAResponse> GetCatalogItems()
+    public async Task<EIAResponseMessage> GetPetrolData()
     {
         var uri = $"{_options.Value.BaseApiUrl}{_options.Value.PetrolPath}{_options.Value.ApiKey}";
         var responseString = await _httpClient.GetStringAsync(uri);
         var response = JsonConvert.DeserializeObject<EIAResponse>(responseString);
 
-        return response;
+        return response.Response;
     }
 }
