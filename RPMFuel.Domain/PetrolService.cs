@@ -1,22 +1,21 @@
-﻿using Microsoft.Extensions.Options;
-using RPMFuel.Infrastructure.Config;
-using RPMFuel.Infrastructure.Database;
-using RPMFuel.Infrastructure.Database.Entities;
-using RPMFuel.Infrastructure.HttpClients;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using RPMFuel.Domain.Interfaces;
+using RPMFuel.Domain.Models.Configs;
 
-namespace RPMFuel;
+namespace RPMFuel.Domain;
 
 public class PetrolService
 {
     private readonly ILogger<PetrolService> _logger;
-    private readonly EIAClient _eIAClient;
-    private readonly FuelRepository _fuelRepository;
+    private readonly IEIAClient _eIAClient;
+    private readonly IFuelRepository _fuelRepository;
     private readonly WorkerConfigOptions _workerConfig;
 
     public PetrolService(
         ILogger<PetrolService> logger,
-        EIAClient eIAClient,
-        FuelRepository fuelRepository,
+        IEIAClient eIAClient,
+        IFuelRepository fuelRepository,
         IOptions<WorkerConfigOptions> options)
     {
         _logger = logger;
@@ -29,11 +28,11 @@ public class PetrolService
     {
         _logger.LogInformation("{MethodName)} started. Look {DaysBehind} days behind",
             nameof(UpdatePrices), _workerConfig.DaysBehind);
-        var res = await _eIAClient.GetPetrolData();
 
         var now = DateOnly.FromDateTime(DateTime.UtcNow);
-        var arrivedFuelDataEntities = res.Data.Where(d => now.DayNumber - d.Period.DayNumber < _workerConfig.DaysBehind)
-            .Select(d => new FuelDataEntity(d.Period, d.Value, d.Units))
+
+        var arrivedFuelDataEntities = (await _eIAClient.GetPetrolData())
+            .Where(d => now.DayNumber - d.Period.DayNumber < _workerConfig.DaysBehind)
             .ToList();
 
         var currentFuelPeriods = (await _fuelRepository.GetAllAsync())

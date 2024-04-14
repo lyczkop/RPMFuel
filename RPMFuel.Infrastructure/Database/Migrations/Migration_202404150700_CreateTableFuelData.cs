@@ -15,8 +15,7 @@ public class Migration_202404150700_CreateTableFuelData : Migration
         Create.Table("FuelData")
             .WithColumn("Id").AsInt32().PrimaryKey().Identity()
             .WithColumn("Period").AsDate().NotNullable()
-            //.WithColumn("Value").AsDecimal().NotNullable()
-            //.WithColumn("Units").AsString().NotNullable();
-            .WithColumn("Price").AsString().NotNullable();
+            .WithColumn("Value").AsDecimal().NotNullable()
+            .WithColumn("Units").AsString().NotNullable();
     }
 }

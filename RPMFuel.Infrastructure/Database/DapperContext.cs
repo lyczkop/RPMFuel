@@ -1,6 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
-using RPMFuel.Infrastructure.Config;
+using RPMFuel.Domain.Models.Configs;
 using System.Data;
 
 namespace RPMFuel.Infrastructure.Database;

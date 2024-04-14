@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RPMFuel.Infrastructure.Config;
+namespace RPMFuel.Domain.Models.Configs;
 
 public class EIAClientConfigOptions
 {

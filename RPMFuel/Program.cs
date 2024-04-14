@@ -1,9 +1,12 @@
 using FluentMigrator.Runner;
 using RPMFuel;
-using RPMFuel.Infrastructure.Config;
+using RPMFuel.Domain;
+using RPMFuel.Domain.Interfaces;
+using RPMFuel.Domain.Models.Configs;
 using RPMFuel.Infrastructure.Database;
 using RPMFuel.Infrastructure.Database.Migrations;
 using RPMFuel.Infrastructure.HttpClients;
+using RPMFuel.ServiceExtensions;
 
 var builder = Host.CreateApplicationBuilder(args);
 builder.Services.AddHostedService<Worker>();
@@ -19,10 +22,11 @@ builder.Services.AddOptions<SqlServerConfigOptions>()
     .ValidateDataAnnotations()
     .ValidateOnStart();
 
-builder.Services.AddHttpClient<EIAClient>();
+// TODO lyko add Polly
+builder.Services.AddHttpClient<IEIAClient, EIAClient>();
 builder.Services.AddSingleton<DapperContext>();
 builder.Services.AddTransient<PetrolService>();
-builder.Services.AddTransient<FuelRepository>();
+builder.Services.AddTransient<IFuelRepository, FuelRepository>();
 
 var sqlServerConfigOptions = builder.Configuration
     .GetRequiredSection(SqlServerConfigOptions.Name)

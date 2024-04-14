@@ -1,4 +1,4 @@
-﻿namespace RPMFuel.Infrastructure.Config;
+﻿namespace RPMFuel.Domain.Models.Configs;
 
 public class WorkerConfigOptions
 {

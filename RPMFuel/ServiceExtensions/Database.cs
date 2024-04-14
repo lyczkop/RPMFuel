@@ -2,9 +2,9 @@
 using FluentMigrator.Runner;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Options;
-using RPMFuel.Infrastructure.Config;
+using RPMFuel.Domain.Models.Configs;
 
-namespace RPMFuel.Infrastructure.Database;
+namespace RPMFuel.ServiceExtensions;
 public static class Database
 {
     public static IHost MigrateDatabase(this IHost host)

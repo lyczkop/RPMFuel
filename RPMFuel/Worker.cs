@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Options;
-using RPMFuel.Infrastructure.Config;
+using RPMFuel.Domain;
+using RPMFuel.Domain.Models.Configs;
 
 namespace RPMFuel;
 

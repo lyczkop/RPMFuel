@@ -10,10 +10,13 @@ public class FuelDataEntity
     public FuelDataEntity(DateOnly period, decimal value, string units)
     {
         Period = period;
-        Price = $"{value}{units}";
+        Value = value;
+        Units = units;
     }
 
     public int Id { get; init; }
     public DateOnly Period { get; init; }
-    public string Price { get; init; }
+    public decimal Value { get; }
+    public string Units { get; }
+    public string Price => $"{Value}{Units}";
 }
