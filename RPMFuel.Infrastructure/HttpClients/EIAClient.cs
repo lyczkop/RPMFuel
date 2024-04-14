@@ -17,10 +17,10 @@ public class EIAClient : IEIAClient
         _options = options;
     }
 
-    public async Task<ICollection<FuelDto>> GetPetrolData()
+    public async Task<ICollection<FuelDto>> GetPetrolDataAsync(CancellationToken cancellationToken)
     {
         var uri = $"{_options.Value.BaseApiUrl}{_options.Value.PetrolPath}{_options.Value.ApiKey}";
-        var responseString = await _httpClient.GetStringAsync(uri);
+        var responseString = await _httpClient.GetStringAsync(uri, cancellationToken);
         var response = JsonConvert.DeserializeObject<EIAResponse>(responseString);
 
         // TODO lyko check null reference

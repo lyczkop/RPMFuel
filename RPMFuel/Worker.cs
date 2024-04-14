@@ -25,7 +25,7 @@ public class Worker : BackgroundService
             _logger.LogInformation("Worker running at: {time} with {interval} seconds interval",
                 DateTimeOffset.Now, _workerConfig.DelayInSeconds);
 
-            await _petrolService.UpdatePrices();
+            await _petrolService.UpdatePrices(stoppingToken);
 
             var delay = TimeSpan.FromSeconds(_workerConfig.DelayInSeconds);
             await Task.Delay((int)delay.TotalMilliseconds, stoppingToken);

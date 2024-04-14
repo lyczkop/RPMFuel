@@ -6,9 +6,11 @@ using RPMFuel.Domain.Models.Configs;
 using RPMFuel.Infrastructure.Database;
 using RPMFuel.Infrastructure.Database.Migrations;
 using RPMFuel.Infrastructure.HttpClients;
+using RPMFuel.Infrastructure.Time;
 using RPMFuel.ServiceExtensions;
 
 var builder = Host.CreateApplicationBuilder(args);
+builder.Services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
 builder.Services.AddHostedService<Worker>();
 
 builder.Services.AddOptions<WorkerConfigOptions>()
